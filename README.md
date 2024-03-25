@@ -65,6 +65,18 @@ So this project aims to tackle the above problem by leverage the tops of TPC.
 |64     |32     |4096       |128        |BF16   |1007               |935                |
 |64     |32     |8192       |128        |BF16   |2011               |1894               |
 
+### Llama2-7B ScoreV BMM
+
+|BS     |Head   |KV length  |Head Dim   |Dtype  |TPC latency(us)    |MME latency(us)    |
+|--:    |--:    |--:        |--:        |--:    |--:                |--:                |
+|64     |32     |128        |128        |BF16   |63                 |42                 |
+|64     |32     |256        |128        |BF16   |123                |81                 |
+|64     |32     |512        |128        |BF16   |247                |160                |
+|64     |32     |1024       |128        |BF16   |482                |311                |
+|64     |32     |2048       |128        |BF16   |981                |639                |
+|64     |32     |4096       |128        |BF16   |1965               |1279               |
+|64     |32     |8192       |128        |BF16   |3911               |2539               |
+
 ## Know issue
 
 - not support release >1.12
