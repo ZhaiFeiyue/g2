@@ -79,4 +79,5 @@ So this project aims to tackle the above problem by leverage the tops of TPC.
 
 ## Know issue
 
-- not support release >1.12
+- ~not support release >1.12~
+- bad perf of ScoreV BMM
