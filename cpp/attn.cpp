@@ -33,13 +33,10 @@ bool register_custom_matmul(DTYPE type) {
       result_sizes[self_rank - 1] = b.sizes().vec()[b_rank - 1];
       return result_sizes;
     };
-    habana::custom_op::OutputDesc output_desc{
-        0, c10::ScalarType::Float, output_size_lambda};
-
-    std::vector<habana::custom_op::OutputDesc> outputs_desc{
-        output_desc};
 
     if (type == DTYPE::BFLOAT16) {
+	habana::custom_op::OutputDesc output_desc{0, c10::ScalarType::BFloat16, output_size_lambda};
+	std::vector<habana::custom_op::OutputDesc> outputs_desc{output_desc};
       REGISTER_CUSTOM_OP_ATTRIBUTES(
           "custom_op::custom_matmul_bf16", //schema name
           "custom_matrix_multiply_fwd_bf16_gaudi2", // guid
@@ -50,6 +47,8 @@ bool register_custom_matmul(DTYPE type) {
     }
 
     if (type == DTYPE::FLOAT) {
+	habana::custom_op::OutputDesc output_desc{0, c10::ScalarType::Float, output_size_lambda};
+	std::vector<habana::custom_op::OutputDesc> outputs_desc{output_desc};
       REGISTER_CUSTOM_OP_ATTRIBUTES(
           "custom_op::custom_matmul_fp32", //schema name
           "custom_matrix_multiply_fwd_fp32_gaudi2", // guid
