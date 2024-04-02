@@ -11,11 +11,7 @@ export HABANA_LOGS=`pwd`/logs
 export LOG_LEVEL_ALL=1
 
 
-G2ATTN_DIR=`python -c "import g2attn;print(g2attn.__file__)"`
-G2ATTN_DIR=`echo ${G2ATTN_DIR} | grep 'g2attn/__init__.py'`
-G2ATTN_DIR=`dirname ${G2ATTN_DIR}`
-G2ATTN_SO_FILE=${G2ATTN_DIR}/libcustom_tpc_perf_lib.so
-export GC_KERNEL_PATH=${G2ATTN_SO_FILE}:${GC_KERNEL_PATH}
+export GC_KERNEL_PATH=/root/g2/g2attn/libcustom_tpc_perf_lib.so:${GC_KERNEL_PATH}
 
 #python test_bmm.py
 python test_attn.py

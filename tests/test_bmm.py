@@ -1,41 +1,28 @@
 import torch
 import habana_frameworks.torch.core
 import habana_frameworks.torch.core as htcore
-import g2attn
+#import g2attn
 
 
 def test_custom_matmul_bf16_function():
-    q = torch.rand((2, 2, 1, 128)).to(torch.bfloat16)
+    b = 64
+    m = 32
+    h = 128
+    t = 1024
+
+    q = torch.rand((b, m, 1, h)).to(torch.bfloat16)
     q = q.to("hpu")
 
-    k = torch.rand((2, 2, 128, 1024)).to(torch.bfloat16)
+    k = torch.rand((b, m, t, h)).to(torch.bfloat16)
     k = k.to("hpu")
 
-    c_hpu = torch.ops.custom_op.custom_matmul_bf16(q, k)
+    c_hpu = q + k
     htcore.mark_step()
     htcore.hpu.synchronize()
-    refer = torch.matmul(q, k)
-    print((refer - c_hpu).max().abs())
-    htcore.mark_step()
-    htcore.hpu.synchronize()
-
-def test_custom_matmul_f32_function():
-    q = torch.rand((2, 2, 1, 128)).to(torch.float32)
-    q = q.to("hpu")
-
-    k = torch.rand((2, 2, 128, 1024)).to(torch.float32)
-    k = k.to("hpu")
-
-    c_hpu = torch.ops.custom_op.custom_matmul_fp32(q, k)
-    htcore.mark_step()
-    htcore.hpu.synchronize()
-    refer = torch.matmul(q, k)
-    print((refer - c_hpu).max().abs())
+    o = c_hpu.sum(-1)
     htcore.mark_step()
     htcore.hpu.synchronize()
 
-test_custom_matmul_bf16_function()
-test_custom_matmul_f32_function()
 
 activities = []
 activities.append(torch.profiler.ProfilerActivity.CPU)

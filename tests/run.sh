@@ -17,4 +17,6 @@ G2ATTN_DIR=`dirname ${G2ATTN_DIR}`
 G2ATTN_SO_FILE=${G2ATTN_DIR}/libcustom_tpc_perf_lib.so
 export GC_KERNEL_PATH=${G2ATTN_SO_FILE}:${GC_KERNEL_PATH}
 
-python test_bmm.py
+#python test_bmm.py
+python test_attn.py
+

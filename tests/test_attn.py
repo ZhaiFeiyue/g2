@@ -8,7 +8,7 @@ B = 64
 M = 32
 QT = 1
 H = 128
-KVT = 256
+KVT = 1024
 
 
 class MMEAttn(torch.nn.Module):
@@ -39,11 +39,12 @@ class TPCAttn(torch.nn.Module):
         q = q.reshape([B, QT, M, H])
         k = k.reshape([B, KVT, M, H])
         v = v.reshape([B, KVT, M, H])
-        q = q.permute([0, 2, 1, 3])
-        k = k.permute([0, 2, 3, 1])
+        #q = q.permute([0, 2, 1, 3])
+        #k = k.permute([0, 2, 3, 1])
         v = v.permute([0, 2, 1, 3])
         
-        score = torch.ops.custom_op.custom_matmul_bf16(q, k)
+        score = torch.ops.custom_op.custom_matmul_t_bf16(q, k)
+        score = score.reshape(B, M, QT, KVT)
         score = self.softmax(score)
         out = torch.ops.custom_op.custom_matmul_bf16(score, v)
         return out
@@ -74,7 +75,7 @@ def test_custom_matmul_bf16_function():
 activities = []
 activities.append(torch.profiler.ProfilerActivity.CPU)
 activities.append(torch.profiler.ProfilerActivity.HPU)
-s = torch.profiler.schedule(wait=0, warmup=2, active=10, repeat=1)
+s = torch.profiler.schedule(wait=0, warmup=2, active=2, repeat=1)
 r = torch.profiler.tensorboard_trace_handler('./profile/')
 with torch.profiler.profile(activities=activities,schedule=s,on_trace_ready=r, record_shapes=True,with_stack=True) as prof:
     for i in range(10):
