@@ -22,6 +22,12 @@ export GC_KERNEL_PATH=${G2ATTN_SO_FILE}:${GC_KERNEL_PATH}
 #python test_add_sum.py
 #python test_add_sum.py -B 32 -T 1792
 python test_add_sum.py -B 32 -H 1024 -T 128
+#python test_add_sum_fp8_fp8.py
+#python test_add_sum_fp8_fp8.py -T 128 -H 256
+#python test_add_sum_fp8_bf16.py
+#python test_add_sum_fp8_bf16.py -T 128 -H 256
+#python test_add_sum_fp8_fp32.py
+
 
 #python profile_add_sum_idx_qk.py -B 64 -T 4096 -i 4096
 #python profile_add_sum_idx_sv.py -B 64 -i 4096 -T 4096
